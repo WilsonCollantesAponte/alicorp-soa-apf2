@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>CON01 · Portal Comercial Interno – Alicorp SOA</title>
+<link rel="stylesheet" href="css/estilos.css"><script src="config.js"></script></head>
+<body>
+<header><div class="logo">ALICORP <span>SOA</span></div><div class="sub">CON01 · Portal Comercial Interno<br>Analista / vendedor interno</div>
+<div class="user" id="usr"></div></header>
+<nav id="tabs">
+  <button data-t="registrar" class="act">Registrar pedido</button>
+  <button data-t="pedidos">Pedidos</button>
+  <button data-t="stock">Stock</button>
+  <button data-t="notif">Notificaciones</button>
+</nav>
+<main>
+<section>
+  <div class="card tab" id="t-registrar">
+    <h2>Registrar pedido de venta</h2>
+    <p class="hint">Consume SRV03 (clientes), SRV06 (catálogo y precios canal INTERNO) y SRV01 (pedidos), que a su vez compone SRV02 y SRV05.</p>
+    <div class="row">
+      <label>Cliente<select id="cliente"></select></label>
+      <label>Fecha requerida<input type="date" id="fecha"></label>
+      <label>Observación<input id="obs" placeholder="Opcional" style="width:240px"></label>
+    </div>
+    <table><thead><tr><th>SKU</th><th>Producto</th><th>Marca</th><th class="num">Precio</th><th class="num">Cant. (cajas)</th><th class="num">Importe</th></tr></thead><tbody id="prod"></tbody></table>
+    <div class="tot" id="tot">Subtotal: S/ 0.00</div>
+    <div style="text-align:right;margin-top:10px"><button class="btn" id="enviar">Registrar pedido</button></div>
+    <div id="resultado"></div>
+  </div>
+  <div class="card tab hidden" id="t-pedidos">
+    <h2>Pedidos registrados (todos los canales)</h2>
+    <p class="hint">SRV01 Pedidos · Aprobar / anular (PATCH) y programar despacho con SRV04.</p>
+    <table><thead><tr><th>Pedido</th><th>Cliente</th><th>Origen</th><th>Estado</th><th class="num">Total</th><th>Acciones</th></tr></thead><tbody id="ped"></tbody></table>
+    <div id="msgPed"></div>
+  </div>
+  <div class="card tab hidden" id="t-stock">
+    <h2>Stock por centro de distribución</h2><p class="hint">SRV02 Inventario.</p>
+    <div class="row"><label>Almacén<select id="alm"><option>CD-PIURA</option><option>CD-CALLAO</option></select></label></div>
+    <table><thead><tr><th>SKU</th><th>Producto</th><th>Almacén</th><th class="num">Disponible</th><th class="num">Reservado</th></tr></thead><tbody id="stk"></tbody></table>
+  </div>
+  <div class="card tab hidden" id="t-notif">
+    <h2>Notificaciones emitidas</h2><p class="hint">SRV05 Notificaciones (envío simulado por correo / WhatsApp).</p>
+    <table><thead><tr><th>Pedido</th><th>Evento</th><th>Medio</th><th>Destinatario</th><th>Estado</th></tr></thead><tbody id="ntf"></tbody></table>
+  </div>
+</section>
+<aside><div class="card"><h2>Última respuesta del ESB</h2><p class="hint">Evidencia de consumo: el portal solo habla con el ESB.</p>
+<div class="svc" id="svcUsados"></div><pre id="meta">Sin llamadas aún</pre></div></aside>
+</main>
+<footer>Prototipo académico APF2 – UTP · Arquitectura Orientada al Servicio · Datos ficticios · Proyecto 1 (independiente) → ESB :8080 → Servicios SOA :8000</footer>
+<script src="js/shared/api-client.js"></script>
+<script src="js/modules/pedidos.js"></script>
+<script src="js/app.js"></script>
+</body></html>

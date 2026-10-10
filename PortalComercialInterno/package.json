@@ -1,0 +1,16 @@
+{
+  "name": "portal-comercial-interno",
+  "version": "1.0.0-apf2",
+  "description": "PROYECTO 1 – CON01 Portal Comercial Interno (Alicorp SOA). Consume SRV01–SRV06 solo vía ESB.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "build": "node scripts/generar-config.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
