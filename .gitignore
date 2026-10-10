@@ -1,0 +1,16 @@
+# Secretos y configuración local (solo se versiona .env.example)
+.env*
+!.env.example
+# Dependencias y artefactos
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.db
+*.sqlite3
+.vercel
+# Generados
+ServiciosSOA/esb/logs/
+PortalComercialInterno/public/config.js
+PortalDistribuidores/public/config.js
