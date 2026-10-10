@@ -9,6 +9,16 @@ Prototipo académico con **datos ficticios**. Este repositorio reúne los **3 pr
 | Proyecto 2 – **CON02 Portal Distribuidores / Canal moderno** | `PortalDistribuidores/` | Web consumidora 2 (distribuidor) | HTML + JS (Express solo en local) |
 | Proyecto 3 – **Servicios SOA + ESB** | `ServiciosSOA/` | Servicios SRV01–SRV06, ESB ligero y BD compartida | Python 3.12 + FastAPI |
 
+## Despliegue en producción (Vercel)
+
+| Proyecto | URL |
+|---|---|
+| Servicios SOA + ESB | https://alicorp-soa-servicios.vercel.app (índice) · [Swagger ESB](https://alicorp-soa-servicios.vercel.app/docs) · [Swagger servicios](https://alicorp-soa-servicios.vercel.app/srv/docs) · [salud](https://alicorp-soa-servicios.vercel.app/srv/health) |
+| CON01 Portal Comercial Interno | https://alicorp-con01-portal-comercial.vercel.app |
+| CON02 Portal Distribuidores | https://alicorp-con02-portal-distribuidores.vercel.app |
+
+Base de datos: Postgres en Neon (variable `DATABASE_URL` del proyecto de servicios). Cada `git push` a `main` vuelve a desplegar los tres proyectos.
+
 ## Arquitectura
 
 ```
@@ -89,7 +99,7 @@ Ver `ServiciosSOA/.env.example` y `Portal*/.env.example` (solo nombres). Los arc
 
 ## Despliegue en Vercel
 
-Tres proyectos de Vercel importados desde **este mismo repositorio**, cada uno con su *Root Directory*:
+Tres proyectos de Vercel importados desde **este mismo repositorio** (`alicorp-soa-servicios`, `alicorp-con01-portal-comercial`, `alicorp-con02-portal-distribuidores`), cada uno con su *Root Directory*:
 
 | Proyecto Vercel | Root Directory | Framework | Build | Variables |
 |---|---|---|---|---|
