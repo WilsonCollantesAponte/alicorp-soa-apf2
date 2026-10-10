@@ -1,0 +1,1763 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Alicorp SOA – Proyecto 3: Servicios SOA",
+    "description": "Servicios de negocio de la solución SOA de **gestión de pedidos y distribución** (prototipo académico APF2). Los portales CON01 y CON02 no llaman aquí directamente: entran por el ESB (puerto 8080). Datos de prueba ficticios.",
+    "version": "1.0.0-apf2"
+  },
+  "paths": {
+    "/api/v1/pedidos": {
+      "post": {
+        "tags": [
+          "SRV01 Pedidos"
+        ],
+        "summary": "Registrar pedido (orquesta SRV03, SRV06, SRV02 y SRV05)",
+        "operationId": "registrar_pedido_api_v1_pedidos_post",
+        "parameters": [
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PedidoIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SRV01 Pedidos"
+        ],
+        "summary": "Listar pedidos (filtros por cliente, estado y origen)",
+        "operationId": "listar_api_v1_pedidos_get",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Clienteid"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          },
+          {
+            "name": "origen",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Origen"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pedidos/{pedidoId}": {
+      "get": {
+        "tags": [
+          "SRV01 Pedidos"
+        ],
+        "summary": "Consultar pedido con sus líneas",
+        "operationId": "obtener_api_v1_pedidos__pedidoId__get",
+        "parameters": [
+          {
+            "name": "pedidoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pedidoid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pedidos/{pedidoId}/estado": {
+      "patch": {
+        "tags": [
+          "SRV01 Pedidos"
+        ],
+        "summary": "Cambiar estado (aprobar, anular, despachar, entregar)",
+        "operationId": "cambiar_estado_api_v1_pedidos__pedidoId__estado_patch",
+        "parameters": [
+          {
+            "name": "pedidoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Pedidoid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EstadoPedidoIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventario/stock": {
+      "get": {
+        "tags": [
+          "SRV02 Inventario"
+        ],
+        "summary": "Consultar stock disponible",
+        "operationId": "stock_api_v1_inventario_stock_get",
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sku"
+            }
+          },
+          {
+            "name": "almacen",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Almacen"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventario/reservas": {
+      "post": {
+        "tags": [
+          "SRV02 Inventario"
+        ],
+        "summary": "Reservar stock para un pedido (todo o nada)",
+        "operationId": "reservar_api_v1_inventario_reservas_post",
+        "parameters": [
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservaIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inventario/reservas/{reservaId}": {
+      "delete": {
+        "tags": [
+          "SRV02 Inventario"
+        ],
+        "summary": "Liberar una reserva (anulación o compensación)",
+        "operationId": "liberar_api_v1_inventario_reservas__reservaId__delete",
+        "parameters": [
+          {
+            "name": "reservaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservaid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clientes": {
+      "get": {
+        "tags": [
+          "SRV03 Clientes/Distribuidores"
+        ],
+        "summary": "Listar clientes/distribuidores",
+        "operationId": "listar_api_v1_clientes_get",
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "examples": [
+                "DISTRIBUIDOR"
+              ],
+              "title": "Tipo"
+            }
+          },
+          {
+            "name": "ciudad",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Ciudad"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SRV03 Clientes/Distribuidores"
+        ],
+        "summary": "Registrar cliente/distribuidor",
+        "operationId": "crear_api_v1_clientes_post",
+        "parameters": [
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clientes/{clienteId}": {
+      "get": {
+        "tags": [
+          "SRV03 Clientes/Distribuidores"
+        ],
+        "summary": "Obtener cliente por código",
+        "operationId": "obtener_api_v1_clientes__clienteId__get",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Clienteid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/clientes/{clienteId}/validacion": {
+      "get": {
+        "tags": [
+          "SRV03 Clientes/Distribuidores"
+        ],
+        "summary": "Validar si el cliente puede generar pedidos",
+        "operationId": "validar_api_v1_clientes__clienteId__validacion_get",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Clienteid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/despachos": {
+      "post": {
+        "tags": [
+          "SRV04 Despacho/Logística"
+        ],
+        "summary": "Programar despacho de un pedido CONFIRMADO",
+        "operationId": "programar_api_v1_despachos_post",
+        "parameters": [
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DespachoIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SRV04 Despacho/Logística"
+        ],
+        "summary": "Listar despachos (por pedido o estado)",
+        "operationId": "listar_api_v1_despachos_get",
+        "parameters": [
+          {
+            "name": "pedidoId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Pedidoid"
+            }
+          },
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/despachos/{despachoId}": {
+      "get": {
+        "tags": [
+          "SRV04 Despacho/Logística"
+        ],
+        "summary": "Consultar despacho (tracking)",
+        "operationId": "obtener_api_v1_despachos__despachoId__get",
+        "parameters": [
+          {
+            "name": "despachoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Despachoid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/despachos/{despachoId}/estado": {
+      "patch": {
+        "tags": [
+          "SRV04 Despacho/Logística"
+        ],
+        "summary": "Actualizar estado del despacho (EN_RUTA, ENTREGADO, INCIDENCIA)",
+        "operationId": "actualizar_api_v1_despachos__despachoId__estado_patch",
+        "parameters": [
+          {
+            "name": "despachoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Despachoid"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EstadoDespachoIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notificaciones": {
+      "post": {
+        "tags": [
+          "SRV05 Notificaciones"
+        ],
+        "summary": "Encolar/enviar una notificación de estado",
+        "operationId": "enviar_api_v1_notificaciones_post",
+        "parameters": [
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificacionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "SRV05 Notificaciones"
+        ],
+        "summary": "Consultar notificaciones emitidas",
+        "operationId": "listar_api_v1_notificaciones_get",
+        "parameters": [
+          {
+            "name": "pedidoId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Pedidoid"
+            }
+          },
+          {
+            "name": "destinatario",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Destinatario"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalogo/productos": {
+      "get": {
+        "tags": [
+          "SRV06 Catálogo/Precios"
+        ],
+        "summary": "Listar productos con precio vigente por canal",
+        "operationId": "productos_api_v1_catalogo_productos_get",
+        "parameters": [
+          {
+            "name": "canal",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "examples": [
+                "DISTRIBUIDOR"
+              ],
+              "default": "INTERNO",
+              "title": "Canal"
+            }
+          },
+          {
+            "name": "categoria",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Categoria"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalogo/productos/{sku}": {
+      "get": {
+        "tags": [
+          "SRV06 Catálogo/Precios"
+        ],
+        "summary": "Obtener producto y precios de todos los canales",
+        "operationId": "producto_api_v1_catalogo_productos__sku__get",
+        "parameters": [
+          {
+            "name": "sku",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sku"
+            }
+          },
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/catalogo/cotizaciones": {
+      "post": {
+        "tags": [
+          "SRV06 Catálogo/Precios"
+        ],
+        "summary": "Valorizar líneas de pedido según el canal",
+        "operationId": "cotizar_api_v1_catalogo_cotizaciones_post",
+        "parameters": [
+          {
+            "name": "x-origen",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)",
+              "default": "SWAGGER",
+              "title": "X-Origen"
+            },
+            "description": "Quién invoca: ESB, SRVxx o SWAGGER (pruebas)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CotizacionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Salud"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ClienteIn": {
+        "properties": {
+          "clienteId": {
+            "type": "string",
+            "title": "Clienteid"
+          },
+          "razonSocial": {
+            "type": "string",
+            "title": "Razonsocial"
+          },
+          "ruc": {
+            "type": "string",
+            "pattern": "^\\d{11}$",
+            "title": "Ruc"
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "DISTRIBUIDOR",
+              "CANAL_MODERNO",
+              "MAYORISTA"
+            ],
+            "title": "Tipo"
+          },
+          "canal": {
+            "type": "string",
+            "enum": [
+              "INTERNO",
+              "DISTRIBUIDOR",
+              "MODERNO"
+            ],
+            "title": "Canal"
+          },
+          "ciudad": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ciudad"
+          },
+          "direccion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direccion"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "telefono": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Telefono"
+          },
+          "lineaCredito": {
+            "type": "number",
+            "title": "Lineacredito",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "clienteId",
+          "razonSocial",
+          "ruc",
+          "tipo",
+          "canal"
+        ],
+        "title": "ClienteIn"
+      },
+      "CotizacionIn": {
+        "properties": {
+          "canal": {
+            "type": "string",
+            "enum": [
+              "INTERNO",
+              "DISTRIBUIDOR",
+              "MODERNO"
+            ],
+            "title": "Canal"
+          },
+          "lineas": {
+            "items": {
+              "$ref": "#/components/schemas/LineaPedido"
+            },
+            "type": "array",
+            "title": "Lineas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "canal",
+          "lineas"
+        ],
+        "title": "CotizacionIn"
+      },
+      "DespachoIn": {
+        "properties": {
+          "pedidoId": {
+            "type": "string",
+            "title": "Pedidoid",
+            "examples": [
+              "PED-000001"
+            ]
+          },
+          "fechaProgramada": {
+            "type": "string",
+            "title": "Fechaprogramada",
+            "examples": [
+              "2026-10-15"
+            ]
+          },
+          "transportista": {
+            "type": "string",
+            "title": "Transportista",
+            "default": "Transportes Ruta Norte (ficticio)"
+          },
+          "placa": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Placa",
+            "examples": [
+              "P1A-123"
+            ]
+          },
+          "almacenOrigen": {
+            "type": "string",
+            "title": "Almacenorigen",
+            "default": "CD-PIURA"
+          },
+          "direccion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direccion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pedidoId",
+          "fechaProgramada"
+        ],
+        "title": "DespachoIn"
+      },
+      "EstadoDespachoIn": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "PROGRAMADO",
+              "EN_RUTA",
+              "ENTREGADO",
+              "INCIDENCIA"
+            ],
+            "title": "Estado"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado"
+        ],
+        "title": "EstadoDespachoIn"
+      },
+      "EstadoPedidoIn": {
+        "properties": {
+          "estado": {
+            "type": "string",
+            "enum": [
+              "CONFIRMADO",
+              "ANULADO",
+              "EN_DESPACHO",
+              "ENTREGADO"
+            ],
+            "title": "Estado"
+          },
+          "motivo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motivo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado"
+        ],
+        "title": "EstadoPedidoIn"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LineaPedido": {
+        "properties": {
+          "sku": {
+            "type": "string",
+            "title": "Sku",
+            "examples": [
+              "ALI-ACE-0001"
+            ]
+          },
+          "cantidad": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Cantidad",
+            "examples": [
+              20
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "sku",
+          "cantidad"
+        ],
+        "title": "LineaPedido"
+      },
+      "NotificacionIn": {
+        "properties": {
+          "pedidoId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pedidoid"
+          },
+          "destinatario": {
+            "type": "string",
+            "title": "Destinatario",
+            "examples": [
+              "pedidos@dnortepiura.test"
+            ]
+          },
+          "medio": {
+            "type": "string",
+            "enum": [
+              "EMAIL",
+              "WHATSAPP"
+            ],
+            "title": "Medio",
+            "default": "EMAIL"
+          },
+          "evento": {
+            "type": "string",
+            "title": "Evento",
+            "examples": [
+              "PEDIDO_REGISTRADO"
+            ]
+          },
+          "mensaje": {
+            "type": "string",
+            "title": "Mensaje"
+          }
+        },
+        "type": "object",
+        "required": [
+          "destinatario",
+          "evento",
+          "mensaje"
+        ],
+        "title": "NotificacionIn"
+      },
+      "PedidoIn": {
+        "properties": {
+          "clienteId": {
+            "type": "string",
+            "title": "Clienteid",
+            "examples": [
+              "CLI-0001"
+            ]
+          },
+          "canal": {
+            "type": "string",
+            "enum": [
+              "INTERNO",
+              "DISTRIBUIDOR",
+              "MODERNO"
+            ],
+            "title": "Canal",
+            "examples": [
+              "INTERNO"
+            ]
+          },
+          "origen": {
+            "type": "string",
+            "enum": [
+              "CON01",
+              "CON02"
+            ],
+            "title": "Origen",
+            "examples": [
+              "CON01"
+            ]
+          },
+          "lineas": {
+            "items": {
+              "$ref": "#/components/schemas/LineaPedido"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Lineas"
+          },
+          "fechaRequerida": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fecharequerida",
+            "examples": [
+              "2026-10-16"
+            ]
+          },
+          "direccionEntrega": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direccionentrega"
+          },
+          "observacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observacion"
+          },
+          "usuario": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usuario",
+            "examples": [
+              "vendedor.piura01"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "clienteId",
+          "canal",
+          "origen",
+          "lineas"
+        ],
+        "title": "PedidoIn"
+      },
+      "ReservaIn": {
+        "properties": {
+          "pedidoRef": {
+            "type": "string",
+            "title": "Pedidoref",
+            "examples": [
+              "PRE-20261010-0001"
+            ]
+          },
+          "almacen": {
+            "type": "string",
+            "title": "Almacen",
+            "default": "CD-PIURA",
+            "examples": [
+              "CD-PIURA"
+            ]
+          },
+          "lineas": {
+            "items": {
+              "$ref": "#/components/schemas/LineaPedido"
+            },
+            "type": "array",
+            "title": "Lineas"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pedidoRef",
+          "lineas"
+        ],
+        "title": "ReservaIn"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

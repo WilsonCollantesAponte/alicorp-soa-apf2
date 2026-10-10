@@ -1,0 +1,826 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Alicorp SOA – ESB (Enterprise Service Bus ligero)",
+    "description": "Puerta única de CON01 y CON02 hacia SRV01–SRV06. Enruta, transforma, valida al consumidor, agrega correlación y deja traza de cada mediación. Cabeceras: `X-Api-Key`, `X-Usuario`, `X-Cliente` (solo CON02).",
+    "version": "1.0.0-apf2"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "ESB"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/esb/v1/_registro": {
+      "get": {
+        "tags": [
+          "ESB"
+        ],
+        "summary": "Registro de servicios y rutas publicadas (descubrimiento)",
+        "operationId": "registro_esb_v1__registro_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/esb/v1/_trazas": {
+      "get": {
+        "tags": [
+          "ESB"
+        ],
+        "summary": "Últimas mediaciones registradas",
+        "operationId": "trazas_esb_v1__trazas_get",
+        "parameters": [
+          {
+            "name": "n",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 15,
+              "title": "N"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/esb/v1/{prefijo}/{resto}": {
+      "get": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo___resto__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo___resto__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo___resto__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo___resto__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/esb/v1/{prefijo}": {
+      "get": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ESB – mediación"
+        ],
+        "summary": "Mediar",
+        "operationId": "mediar_esb_v1__prefijo__get",
+        "parameters": [
+          {
+            "name": "prefijo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Prefijo"
+            }
+          },
+          {
+            "name": "resto",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Resto"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "con01-demo-key | con02-demo-key",
+              "title": "X-Api-Key"
+            },
+            "description": "con01-demo-key | con02-demo-key"
+          },
+          {
+            "name": "x-usuario",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "anonimo",
+              "title": "X-Usuario"
+            }
+          },
+          {
+            "name": "x-cliente",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

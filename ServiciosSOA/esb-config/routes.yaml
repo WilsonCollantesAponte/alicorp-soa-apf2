@@ -1,0 +1,59 @@
+# Configuración del ESB ligero (mediación) – Alicorp SOA, APF2.
+# El ESB es la ÚNICA puerta de entrada de los portales hacia los servicios.
+esb:
+  nombre: "ESB-Alicorp (mediación ligera, prototipo académico)"
+  destino_servicios: "http://127.0.0.1:8000/api/v1"   # Proyecto 3 – Servicios SOA
+  timeout_segundos: 10
+  log_mediaciones: "esb/logs/mediaciones.jsonl"
+
+# Consumidores registrados (seguridad básica por API key; JWT previsto para APF3)
+consumidores:
+  CON01:
+    nombre: "Portal Comercial Interno"
+    api_key: "con01-demo-key"
+    canal_por_defecto: "INTERNO"
+  CON02:
+    nombre: "Portal Distribuidores / Canal moderno"
+    api_key: "con02-demo-key"
+    canal_por_defecto: "DISTRIBUIDOR"
+
+# Tabla de enrutamiento: prefijo público → servicio destino
+rutas:
+  - id: R01
+    prefijo: pedidos
+    servicio: SRV01
+    destino: /pedidos
+    metodos: { CON01: [GET, POST, PATCH], CON02: [GET, POST] }
+    transformaciones:
+      CON02: [pedido_distribuidor_a_canonico, filtrar_por_distribuidor]
+      CON01: [completar_origen_canal]
+  - id: R02
+    prefijo: inventario
+    servicio: SRV02
+    destino: /inventario
+    metodos: { CON01: [GET, POST, DELETE], CON02: [GET] }
+  - id: R03
+    prefijo: clientes
+    servicio: SRV03
+    destino: /clientes
+    metodos: { CON01: [GET, POST], CON02: [GET] }
+    transformaciones:
+      CON02: [filtrar_por_distribuidor]
+  - id: R04
+    prefijo: despachos
+    servicio: SRV04
+    destino: /despachos
+    metodos: { CON01: [GET, POST, PATCH], CON02: [GET] }
+  - id: R05
+    prefijo: notificaciones
+    servicio: SRV05
+    destino: /notificaciones
+    metodos: { CON01: [GET, POST], CON02: [GET] }
+  - id: R06
+    prefijo: catalogo
+    servicio: SRV06
+    destino: /catalogo
+    metodos: { CON01: [GET, POST], CON02: [GET, POST] }
+    transformaciones:
+      CON01: [forzar_canal_consumidor]
+      CON02: [forzar_canal_consumidor]
